@@ -1,56 +1,36 @@
 import streamlit as st
-
-# 페이지 설정
-st.set_page_config(page_title="자기소개", layout="centered")
+import matplotlib.pyplot as plt
+import seaborn as sns
+import plotly.express as px
 
 # 배경색 설정
-st.markdown("""
-<style>
-    .stApp {
-        background-color: #f0f8ff;
+sns.set_theme(style="whitegrid")
+try:
+    plt.rc("font", family="NanumGothic")
+except Exception:
+    pass
+
+# 시각화
+st.header("시각화 예시")
+
+with st.expander("Matplotlib + Seaborn 차트"):
+    study_data = {
+        "과목": ["미적분", "선형대수", "확률과통계", "미분방정식", "수치해석"],
+        "공부시간": [8, 6, 5, 4, 3],
     }
-</style>
-""", unsafe_allow_html=True)
+    fig, ax = plt.subplots(figsize=(8, 4))
+    sns.barplot(x="공부시간", y="과목", data=study_data, palette="Blues_d", ax=ax)
+    ax.set_title("과목별 공부 시간")
+    ax.set_xlabel("시간(시간)")
+    ax.set_ylabel("과목")
+    st.pyplot(fig)
 
-# 프로필 섹션
-st.title("📝 자기소개")
-
-# 프로필 정보
-col1, col2 = st.columns([1, 2])
-with col1:
-    st.markdown("<h1 style='text-align: center; margin-top: 30px;'>❄️</h1>", unsafe_allow_html=True)
-
-with col2:
-    st.subheader("김하경")
-    st.write("학생")
-
-# 자기소개
-st.header("소개")
-st.write("""
-수학과 사람이에용.
-""")
-
-# 스킬/기술
-st.header("스킬")
-st.write("**프로그래밍**: Python")
-
-# 학회/활동
-st.header("학회")
-st.write("""
-- 수학사랑 학회 (2년 활동 중)
-""")
-
-# 교육
-st.header("교육")
-st.write("""
-- 숙명여자대학교 수학과
-- 교직이수 중
-""")
-
-# 연락처
-st.header("연락처")
-col1, col2 = st.columns(2)
-with col1:
-    st.write("📧 Email: kyung24@sookmyung.ac.kr")
-with col2:
-    st.write("🔗 GitHub: [khkyun9](https://github.com/khkyun9)")
+with st.expander("Plotly 차트"):
+    fig2 = px.line(
+        x=["1월", "2월", "3월", "4월", "5월"],
+        y=[20, 25, 30, 28, 32],
+        labels={"x": "월", "y": "학습 만족도"},
+        title="월별 학습 만족도 변화",
+    )
+    fig2.update_traces(mode="markers+lines")
+    st.plotly_chart(fig2, use_container_width=True)
