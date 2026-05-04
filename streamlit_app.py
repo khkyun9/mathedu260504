@@ -1,19 +1,24 @@
+import os
 import streamlit as st
 import matplotlib.pyplot as plt
+from matplotlib import font_manager
 import seaborn as sns
 import plotly.express as px
 
+# 로컬 한글 폰트 등록
+font_path = os.path.join(os.path.dirname(__file__), "fonts", "NanumGothic-Regular.ttf")
+if os.path.exists(font_path):
+    font_manager.fontManager.addfont(font_path)
+    plt.rcParams["font.family"] = "NanumGothic"
+    plt.rcParams["axes.unicode_minus"] = False
+
 # 배경색 설정
-sns.set_theme(style="whitegrid")
-try:
-    plt.rc("font", family="NanumGothic")
-except Exception:
-    pass
+sns.set_theme(style="whitegrid", rc={"font.family": "NanumGothic"})
 
 # 시각화
 st.header("시각화 예시")
 
-with st.expander("Matplotlib + Seaborn 차트"):
+with st.expander("Matplotlib + Seaborn 차트", expanded=True):
     study_data = {
         "과목": ["미적분", "선형대수", "확률과통계", "미분방정식", "수치해석"],
         "공부시간": [8, 6, 5, 4, 3],
@@ -25,7 +30,7 @@ with st.expander("Matplotlib + Seaborn 차트"):
     ax.set_ylabel("과목")
     st.pyplot(fig)
 
-with st.expander("Plotly 차트"):
+with st.expander("Plotly 차트", expanded=True):
     fig2 = px.line(
         x=["1월", "2월", "3월", "4월", "5월"],
         y=[20, 25, 30, 28, 32],
